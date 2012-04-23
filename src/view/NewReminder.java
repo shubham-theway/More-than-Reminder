@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,6 +18,8 @@ public class NewReminder extends JFrame implements ActionListener
     ReminderData remData;
     public NewReminder(ReminderData rdata)
     {
+	this.setState ( Frame.ICONIFIED );
+	this.setFocusable(false);
 	this.setTitle("Reminder!");
 	remData=rdata;
 	remindAbout=new JLabel(remData.getRemindAbout());
