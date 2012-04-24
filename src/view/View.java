@@ -484,7 +484,8 @@ public class View implements MouseListener, ActionListener
     
     private void closeEditNote()
     {
-	System.out.println("rpanel was visible..but not anymore");
+	System.out.println("npanel was visible..but not anymore");
+	rPanel.setVisible(false);
 	nPanel.setVisible(false);
 	nDataTF.setVisible(false);
 	nSubTF.setVisible(false);
@@ -538,6 +539,7 @@ public class View implements MouseListener, ActionListener
 	System.out.println("-> "+src);
 	if(src.equals("Add Note"))
 	{
+	    notShow();
 	    System.out.println("add note");
 	    Point pt=this.myFrame.getLocationOnScreen();
 	    AddNoteFrame addNote=new AddNoteFrame(pt.x+20,pt.y+70);
@@ -775,10 +777,20 @@ public class View implements MouseListener, ActionListener
 	}
 	else if(src.contains("Remove"))
 	{
-	    int index=reminderIndex.get(rCurrentlySelected);
-	    closeEditReminder();
-	    Application.model.removeReminder(index);
-	    removeUIComp(index);
+	    if(rCurrentlySelected!=null)
+	    {
+		int index=reminderIndex.get(rCurrentlySelected);
+		closeEditReminder();
+		Application.model.removeReminder(index);
+		removeUIComp(index);
+	    }
+	    else
+	    {
+		int index=noteIndex.get(nCurrentlySelected);
+		closeEditNote();
+		Application.model.removeNote(index);
+		removeUIComp(index);
+	    }
 	}
 	else if(src.contains("Exit"))
 	{
@@ -942,12 +954,24 @@ public class View implements MouseListener, ActionListener
     private void removeUIComp(int index)
     {
 	// TODO Auto-generated method stub
-	Component removedComp=rReverseIndex.get(index);
-	rReverseIndex.remove(index);
-	reminderIndex.remove(removedComp);
-	addedReminders.remove(removedComp);
-	removedComp.setVisible(false);
-	removedComp=null;
+	Component removedComp=null;
+	if(rCurrentlySelected != null)
+	{
+	    removedComp=rReverseIndex.get(index);
+	    rReverseIndex.remove(index);
+	    reminderIndex.remove(removedComp);
+	    addedReminders.remove(removedComp);
+	}
+	else
+	{
+	    removedComp=nReverseIndex.get(index);
+	    nReverseIndex.remove(index);
+	    noteIndex.remove(removedComp);
+	    addedNotes.remove(removedComp);
+	}
+	    removedComp.setVisible(false);
+	    removedComp=null;
+	
     }
 
     private void print(ReminderData remData)
@@ -1016,7 +1040,8 @@ public class View implements MouseListener, ActionListener
 	{
 	    // just close
 	}
-	closeEditReminder();
+	//closeEditReminder();
+	closeEditNote();
     }
     private void updateLabel(JLabel comp,ReminderData rData)
     {
